@@ -2,7 +2,7 @@
 
 # TextSnap 📋
 
-TextSnap, ekran alıntısı içerisindeki yazıları optik karakter tanıma (OCR) teknolojisi kullanarak metne dönüştüren bir uygulamadır. Kullanıcılar, uygulama sayesinde metinleri kolayca kopyalayıp paylaşabilir, metinleri düzenleyebilir, farklı dillere çevirebilir ve sesli okuyabilirler.
+TextSnap, Windows cihazlarda çalışan ekran alıntısı içerisindeki yazıları optik karakter tanıma (OCR) teknolojisi kullanarak metne dönüştüren bir uygulamadır. Kullanıcılar, uygulama sayesinde metinleri kolayca kopyalayıp paylaşabilir, metinleri düzenleyebilir, farklı dillere çevirebilir ve sesli okuyabilirler.
 
 ## Özellikler
 
