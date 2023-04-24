@@ -16,7 +16,9 @@ TextSnap, Windows cihazlarda çalışan ekran alıntısı içerisindeki yazılar
 
 1. Bu projeyi klonlayın veya indirin:
 
-`git clone https://github.com/MURABIT-PASHA/TextSnap.git`
+```git clone https://github.com/MURABIT-PASHA/TextSnap.git```
+
+2. Tarama işlemi için [Tesseract-OCR](https://drive.google.com/file/d/18QwLV-PHqHd65x1OICfy4PfJ6BsT6irF/view?usp=share_link) indirin ve proje dizininize kurun.
 
 ## Kullanım
 
