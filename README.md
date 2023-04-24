@@ -1,4 +1,4 @@
-[https://github.com/MURABIT-PASHA/Images/blob/main/banner.png]
+![MURABIT-PASHA Banner](https://github.com/MURABIT-PASHA/Images/blob/main/banner.png)
 
 # TextSnap 📋
 
