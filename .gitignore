@@ -161,3 +161,6 @@ cython_debug/
 
 # Outside package
 Tesseract-OCR/
+
+# Audio Output
+prompter_text.mp3

@@ -50,8 +50,8 @@ class SnipTool(QtWidgets.QWidget):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         self.close()
-        from gui import TextSnapApp
-        TextSnapApp(gray).run()
+        from gui import GUI
+        GUI(gray).run()
 
 
 class NewWindow:

@@ -1,0 +1,70 @@
+#:import toast kivymd.toast.toast
+#:import Toolbar kivymd.uix.toolbar.MDTopAppBar
+MDScreen:
+    FloatLayout:
+        MDBoxLayout:
+            orientation: 'vertical'
+            spacing: 10
+            MDTopAppBar:
+                title: "TextSnap"
+                md_bg_color: app.theme_cls.primary_color
+                elevation: 5
+            ScreenManager:
+                id:screen_manager
+                Screen:
+                    MDBoxLayout:
+                        size_hint: (1,1)
+                        pos_hint: {'center_x':.5, 'center_y':.5}
+                        orientation: 'horizontal'
+                        spacing: 10
+                        MDBoxLayout:
+                            size_hint: (1,1)
+                            pos_hint: {'center_x':.5, 'center_y':.5}
+                            orientation: 'vertical'
+                            MDBoxLayout:
+                                size_hint: (1,1)
+                                MDTextField:
+                                    size_hint:(1,1)
+                                    multiline: True
+                                    id: text_field
+                                    hint_text: "Prompter"
+                                    mode:"rectangle"
+                            MDBoxLayout:
+                                size_hint: (1,.5)
+                                MDRaisedButton:
+                                    size_hint:(.5,None)
+                                    height: 50
+                                    pos_hint: {'center_x':.5, 'center_y':.8}
+                                    id: language_button
+                                    text: "Türkçe"
+                                    on_release: app.open_language_menu()
+                        MDBoxLayout:
+                            size_hint: (.2,1)
+                            pos_hint: {'center_x':.5, 'center_y': 1}
+                            orientation: 'vertical'
+                            MDIconButton:
+                                size_hint: (None, None)
+                                icon: "./copy_to_clipboard.png"
+                                on_release: app.copy_to_clipboard()
+                            MDIconButton:
+                                size_hint: (None, None)
+                                icon: "./simplify_text.png"
+                                on_release: app.simplify_text()
+                            MDIconButton:
+                                size_hint: (None, None)
+                                icon: "./translate_text.png"
+                                on_release: app.translate_text()
+                            MDIconButton:
+                                size_hint: (None, None)
+                                icon: "./read_text.png"
+                                on_release: app.read_text()
+                        MDBoxLayout:
+                            size_hint: (.2,1)
+                            pos_hint: {'center_x':.5, 'center_y': 1}
+                            orientation: 'vertical'
+                            MDIconButton:
+                                icon: "./add.png"
+                                size_hint: (None,None)
+                                width: 1
+                                height: 1
+                                on_release: app.add_new()

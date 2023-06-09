@@ -8,9 +8,9 @@ TextSnap, Windows cihazlarda çalışan ekran alıntısı içerisindeki yazılar
 
 - Ekran alıntısı içerisindeki yazıları otomatik olarak optik karakter tanıma (OCR) teknolojisi kullanarak metne dönüştürme
 - Metinleri düzenleme ve düzenlenmiş metinleri kopyalama veya paylaşma
-- Metinleri farklı dillere çevirme (Eklenecek)
-- Metinleri sesli okuma (Eklenecek)
-- Kolay kullanıcı arayüzü (Geliştirilecek)
+- Metinleri farklı dillere çevirme (Hatalar giderilecek)
+- Metinleri sesli okuma (Hatalar giderilecek)
+- Kolay kullanıcı arayüzü
 
 ## Kurulum
 
