@@ -15,8 +15,9 @@ TextSnap, Windows cihazlarda çalışan ekran alıntısı içerisindeki yazılar
 ## Kurulum
 
 1. Bu projeyi klonlayın veya indirin:
-
-`git clone https://github.com/MURABIT-PASHA/TextSnap.git`
+```git clone https://github.com/MURABIT-PASHA/TextSnap.git```
+2. Tarama işlemi için [Tesseract-OCR](https://drive.google.com/file/d/18QwLV-PHqHd65x1OICfy4PfJ6BsT6irF/view?usp=share_link) indirin ve proje dizininize kurun.
+3. Türkçe karakter tanımlaması için [Türkçe](https://drive.google.com/file/d/1X_GQpWmrTHkJdaUXFnqBoqPttgF36rBT/view?usp=share_link) dosyasını indirin dosya içeriğini daha önce indirmiş olduğunuz Tesseract-OCR klasörü içerisinde bulunan tessdata içerisine atın.
 
 ## Kullanım
 
