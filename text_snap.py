@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PIL import ImageGrab
 import numpy as np
 import cv2
+from gui import GUI
 
 
 class SnipTool(QtWidgets.QWidget):
@@ -50,7 +51,6 @@ class SnipTool(QtWidgets.QWidget):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         self.close()
-        from gui import GUI
         GUI(gray).run()
 
 

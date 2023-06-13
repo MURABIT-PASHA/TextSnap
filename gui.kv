@@ -6,7 +6,7 @@ MDScreen:
             orientation: 'vertical'
             spacing: 10
             MDTopAppBar:
-                title: "TextSnap"
+                title: "Created by Murabıt Akdoğan"
                 md_bg_color: app.theme_cls.primary_color
                 elevation: 5
             ScreenManager:
@@ -44,26 +44,27 @@ MDScreen:
                             orientation: 'vertical'
                             MDIconButton:
                                 size_hint: (None, None)
-                                icon: "./copy_to_clipboard.png"
+                                icon: "./images/copy_to_clipboard.png"
                                 on_release: app.copy_to_clipboard()
                             MDIconButton:
                                 size_hint: (None, None)
-                                icon: "./simplify_text.png"
+                                icon: "./images/simplify_text.png"
                                 on_release: app.simplify_text()
                             MDIconButton:
+                                id: translation_button
                                 size_hint: (None, None)
-                                icon: "./translate_text.png"
+                                icon: "./images/translate_text.png"
                                 on_release: app.translate_text()
                             MDIconButton:
                                 size_hint: (None, None)
-                                icon: "./read_text.png"
+                                icon: "./images/read_text.png"
                                 on_release: app.read_text()
                         MDBoxLayout:
                             size_hint: (.2,1)
                             pos_hint: {'center_x':.5, 'center_y': 1}
                             orientation: 'vertical'
                             MDIconButton:
-                                icon: "./add.png"
+                                icon: "./images/add.png"
                                 size_hint: (None,None)
                                 width: 1
                                 height: 1
