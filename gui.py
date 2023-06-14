@@ -1,3 +1,4 @@
+from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import dp
 from kivy.properties import ListProperty
@@ -103,12 +104,13 @@ class GUI(MDApp):
 
     def add_new(self):
         self.stop()
-        from text_snap import NewWindow
-        NewWindow()
+        from text_snap import SnipTool
+        SnipTool()
 
     def build(self):
         self.title = 'TextSnap'
         self.icon = './icon.ico'
         self.theme_cls.primary_palette = "Orange"
         self.theme_cls.theme_style = "Dark"
+        Window.size = (640, 480)
         return self.screen

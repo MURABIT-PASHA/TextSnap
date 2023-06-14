@@ -1,67 +1,112 @@
-import sys
-from PyQt5 import QtWidgets, QtCore, QtGui
-from PIL import ImageGrab
-import numpy as np
 import cv2
-from gui import GUI
+import numpy as np
+import pyautogui
+from PIL import ImageGrab
+from kivy.app import App
+from kivy.core.window import Window
+from kivy.graphics import Rectangle, Color
+from kivy.lang import Builder
+from kivy.graphics.texture import Texture
+import os
+
+os.environ['KIVY_NO_ARGS'] = '1'
+
+kv_string = '''
+FloatLayout:
+    Image:
+        id: background_image
+    Widget:
+        id: rectangle
+'''
+
+Builder.load_string(kv_string)
 
 
-class SnipTool(QtWidgets.QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setGeometry(0, 0, 1920, 1080)
-        self.setWindowTitle(' ')
-        self.begin = QtCore.QPoint()
-        self.end = QtCore.QPoint()
-        self.setWindowOpacity(0.3)
-        QtWidgets.QApplication.setOverrideCursor(
-            QtGui.QCursor(QtCore.Qt.CrossCursor)
-        )
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        print('Capture the screen...')
-        self.show()
+class SnipTool(App):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.start_pos = [0, 0]
+        self.end_pos = [0, 0]
+        self.widget = None
+        self.is_drawing = False
+        Window.set_system_cursor('crosshair')
+        self.desktop_image = self.capture_desktop()
+        self.bg_path = self.save_path(self.desktop_image)
 
-    def paintEvent(self, event):
-        qp = QtGui.QPainter(self)
-        qp.setPen(QtGui.QPen(QtGui.QColor('black'), 3))
-        qp.setBrush(QtGui.QColor(128, 128, 255, 128))
-        qp.drawRect(QtCore.QRect(self.begin, self.end))
+    def build(self):
+        self.title = 'TextSnap'
+        self.icon = './icon.ico'
+        self.theme_cls.primary_palette = "Orange"
+        self.theme_cls.theme_style = "Dark"
+        layout = Builder.load_string(kv_string)
+        background_image = layout.ids.background_image
+        texture = self.convert_to_texture(self.desktop_image)
+        background_image.texture = texture
+        return layout
 
-    def mousePressEvent(self, event):
-        self.begin = event.pos()
-        self.end = self.begin
-        self.update()
+    def capture_desktop(self):
+        screenshot = pyautogui.screenshot()
+        image = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
+        return image
 
-    def mouseMoveEvent(self, event):
-        self.end = event.pos()
-        self.update()
+    def save_path(self, image):
+        image_filename = "bg_image.jpg"
+        cv2.imwrite(image_filename, image)
+        return image_filename
 
-    def mouseReleaseEvent(self, event):
-        self.close()
+    def convert_to_texture(self, image):
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = cv2.flip(image, 0)
+        h, w, _ = image.shape
+        image_with_alpha = cv2.cvtColor(image, cv2.COLOR_RGB2RGBA)
+        texture = Texture.create(size=(w, h))
+        texture.blit_buffer(image_with_alpha.flatten(), colorfmt='rgba', bufferfmt='ubyte')
+        return texture
 
-        x1 = min(self.begin.x(), self.end.x())
-        y1 = min(self.begin.y(), self.end.y())
-        x2 = max(self.begin.x(), self.end.x())
-        y2 = max(self.begin.y(), self.end.y())
+    def on_touch_down(self, touch):
+        if not self.is_drawing:
+            self.is_drawing = True
+            self.start_pos[0] = touch.pos[0]
+            self.start_pos[1] = Window.size[1] - touch.pos[1]
+            self.end_pos[0] = self.start_pos[0]
+            self.end_pos[1] = self.start_pos[1]
 
-        img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
+    def on_touch_move(self, touch):
+        if self.is_drawing:
+            self.widget.canvas.clear()
+            with self.widget.canvas:
+                Color(rgba=(1, 1, 1, .1))
+                Rectangle(pos=(self.start_pos[0], Window.size[1] - self.start_pos[1]),
+                          size=(touch.pos[0] - self.start_pos[0], self.start_pos[1] - self.end_pos[1]))
+            self.end_pos[0] = touch.pos[0]
+            self.end_pos[1] = Window.size[1] - touch.pos[1]
 
-        img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
+    def on_touch_up(self, touch):
+        if self.is_drawing:
+            self.is_drawing = False
+            with self.widget.canvas:
+                Rectangle(pos=(self.start_pos[0], Window.size[1] - self.start_pos[1]),
+                          size=(touch.pos[0] - self.start_pos[0], self.start_pos[1] - self.end_pos[1]))
+            x1 = min(self.start_pos[0], self.end_pos[0])
+            y1 = min(self.start_pos[1], self.end_pos[1])
+            x2 = max(self.start_pos[0], self.end_pos[0])
+            y2 = max(self.start_pos[1], self.end_pos[1])
+            img = ImageGrab.grab(bbox=(x1, y1, x2, y2))
 
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            img = cv2.cvtColor(np.array(img), cv2.COLOR_BGR2RGB)
 
-        self.close()
-        GUI(gray).run()
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            self.stop()
+            from gui import GUI
+            GUI(gray).run()
 
-
-class NewWindow:
-    def __init__(self):
-        app = QtWidgets.QApplication(sys.argv)
-        window = SnipTool()
-        window.show()
-        app.aboutToQuit.connect(app.deleteLater)
-        sys.exit(app.exec_())
+    def on_start(self):
+        self.root_window.fullscreen = 'auto'
+        self.widget = self.root.ids.rectangle
+        self.widget.on_touch_down = self.on_touch_down
+        self.widget.on_touch_move = self.on_touch_move
+        self.widget.on_touch_up = self.on_touch_up
 
 
 if __name__ == '__main__':
-    new_window = NewWindow()
+    SnipTool().run()
