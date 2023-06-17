@@ -3,6 +3,7 @@ from kivy.lang import Builder
 from kivy.metrics import dp
 from kivy.properties import ListProperty
 from kivymd.app import MDApp
+from kivymd.toast import toast
 from kivymd.uix.menu import MDDropdownMenu
 from kivy.core.clipboard import Clipboard
 from kivy.core.audio import SoundLoader
@@ -60,6 +61,10 @@ class GUI(MDApp):
 
     def copy_to_clipboard(self):
         Clipboard.copy(self.prompter.text)
+        if self.language == "tr":
+            toast(text="Kopyalandı", duration=2.5)
+        else:
+            toast(text="Copied", duration=2.5)
 
     def simplify_text(self):
         self.prompter.text = self.prompt.replace("\n", " ")
@@ -105,7 +110,7 @@ class GUI(MDApp):
     def add_new(self):
         self.stop()
         from text_snap import SnipTool
-        SnipTool()
+        SnipTool().run()
 
     def build(self):
         self.title = 'TextSnap'

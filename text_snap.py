@@ -29,15 +29,12 @@ class SnipTool(App):
         self.end_pos = [0, 0]
         self.widget = None
         self.is_drawing = False
-        Window.set_system_cursor('crosshair')
         self.desktop_image = self.capture_desktop()
         self.bg_path = self.save_path(self.desktop_image)
 
     def build(self):
         self.title = 'TextSnap'
         self.icon = './icon.ico'
-        self.theme_cls.primary_palette = "Orange"
-        self.theme_cls.theme_style = "Dark"
         layout = Builder.load_string(kv_string)
         background_image = layout.ids.background_image
         texture = self.convert_to_texture(self.desktop_image)
@@ -97,11 +94,14 @@ class SnipTool(App):
 
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             self.stop()
+            Window.set_system_cursor('arrow')
+            self.root_window.fullscreen = False
             from gui import GUI
             GUI(gray).run()
 
     def on_start(self):
         self.root_window.fullscreen = 'auto'
+        Window.set_system_cursor('crosshair')
         self.widget = self.root.ids.rectangle
         self.widget.on_touch_down = self.on_touch_down
         self.widget.on_touch_move = self.on_touch_move
