@@ -1,3 +1,6 @@
+import cv2
+import numpy as np
+import pyautogui
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import dp
@@ -10,13 +13,15 @@ from kivy.core.audio import SoundLoader
 from gtts import gTTS
 from deep_translator import GoogleTranslator
 import pytesseract
+from win32api import Sleep
 
 
 class GUI(MDApp):
     def __init__(self, gray, **kwargs):
         super().__init__(**kwargs)
         pytesseract.pytesseract.tesseract_cmd = '.\\Tesseract-OCR\\tesseract.exe'
-        self.screen = Builder.load_file('gui.kv')
+        self.icon = './icon.ico'
+        self.screen = Builder.load_file('./gui.kv')
         self.language = "tr"
         self.translate_language = "en"
         self.tesseract_language = "tur"
@@ -109,8 +114,11 @@ class GUI(MDApp):
 
     def add_new(self):
         self.stop()
+        Window.hide()
+        Sleep(500)
+        image = capture_desktop()
         from text_snap import SnipTool
-        SnipTool().run()
+        SnipTool(image).run()
 
     def build(self):
         self.title = 'TextSnap'
@@ -119,3 +127,9 @@ class GUI(MDApp):
         self.theme_cls.theme_style = "Dark"
         Window.size = (640, 480)
         return self.screen
+
+
+def capture_desktop():
+    screenshot = pyautogui.screenshot()
+    image = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
+    return image

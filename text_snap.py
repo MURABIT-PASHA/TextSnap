@@ -9,42 +9,32 @@ from kivy.lang import Builder
 from kivy.graphics.texture import Texture
 import os
 
+from win32api import Sleep
+
+Window.hide()
 os.environ['KIVY_NO_ARGS'] = '1'
 
-kv_string = '''
-FloatLayout:
-    Image:
-        id: background_image
-    Widget:
-        id: rectangle
-'''
-
-Builder.load_string(kv_string)
+Builder.load_file("./text_snap.kv")
 
 
 class SnipTool(App):
-    def __init__(self, **kwargs):
+    def __init__(self, captured_image, **kwargs):
         super().__init__(**kwargs)
         self.start_pos = [0, 0]
         self.end_pos = [0, 0]
         self.widget = None
         self.is_drawing = False
-        self.desktop_image = self.capture_desktop()
+        self.desktop_image = captured_image
         self.bg_path = self.save_path(self.desktop_image)
 
     def build(self):
         self.title = 'TextSnap'
         self.icon = './icon.ico'
-        layout = Builder.load_string(kv_string)
+        layout = Builder.load_file("./text_snap.kv")
         background_image = layout.ids.background_image
         texture = self.convert_to_texture(self.desktop_image)
         background_image.texture = texture
         return layout
-
-    def capture_desktop(self):
-        screenshot = pyautogui.screenshot()
-        image = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
-        return image
 
     def save_path(self, image):
         image_filename = "bg_image.jpg"
@@ -100,6 +90,7 @@ class SnipTool(App):
             GUI(gray).run()
 
     def on_start(self):
+        Window.show()
         self.root_window.fullscreen = 'auto'
         Window.set_system_cursor('crosshair')
         self.widget = self.root.ids.rectangle
@@ -108,5 +99,16 @@ class SnipTool(App):
         self.widget.on_touch_up = self.on_touch_up
 
 
+def capture_desktop():
+    screenshot = pyautogui.screenshot()
+    image = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
+    return image
+
+
 if __name__ == '__main__':
-    SnipTool().run()
+    try:
+        Sleep(500)
+        get_image = capture_desktop()
+        SnipTool(captured_image=get_image).run()
+    except cv2.error:
+        exit(0)
